@@ -1,23 +1,5 @@
 version: "2.1"
 services:
-  emby:
-    image: lscr.io/linuxserver/emby:latest
-    container_name: emby
-    environment:
-      - PUID=568
-      - PGID=568
-      - TZ=America/New_York
-    volumes:
-      - /configs/emby:/config
-      - /media/tv:/media/tv
-      - /media/movies:/media/movies
-    ports:
-      - 8096:8096
-      - 8920:8920 #optional
-    networks:
-      - arr
-    restart: unless-stopped
-
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
@@ -25,24 +7,24 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     ports:
       - "${PORT:-8191}:8191"
     restart: unless-stopped
     networks:
       - arr
 
-  jellyseerr:
-    image: fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
     environment:
       - LOG_LEVEL=debug
-      - TZ=America/New_York
-      - JELLYFIN_TYPE=emby
+      - TZ=Europe/Dublin
+      - PORT=5055 #optional
     ports:
       - 5055:5055
     volumes:
-      - /configs/jellyseerr:/app/config
+      - /configs/Overseerr:/config
     restart: unless-stopped
     networks:
       - arr
@@ -53,7 +35,7 @@ services:
     environment:
       - PUID=568
       - PGID=568
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     volumes:
       - /configs/prowlarr:/config
     ports:
@@ -72,15 +54,15 @@ services:
       - PUID=568
       - PGID=568
       - UMASK=002
-      - TZ=America/New_York
-      - VPN_ENABLED=true
+      - TZ=Europe/Dublin
+      - VPN_ENABLED=false
       - VPN_LAN_NETWORK=192.168.1.0/24
       - VPN_CONF=wg0
       - VPN_ADDITIONAL_PORTS
       - PRIVOXY_ENABLED=false
     volumes:
       - /configs/qbit:/config
-      - /media/downloads:/media/downloads
+      - /mnt/ext/Media/Downloads:/media/downloads
     cap_add:
       - NET_ADMIN
     dns:
@@ -97,11 +79,11 @@ services:
     environment:
       - PUID=568
       - PGID=568
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     volumes:
       - /configs/radarr:/config
-      - /media/movies:/media/movies 
-      - /media/downloads:/media/downloads 
+      - /mnt/ext/Media/Movies:/media/movies 
+      - /mnt/ext/Media/Downloads:/media/downloads 
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -115,7 +97,7 @@ services:
     volumes:
       - /configs/recyclarr:/config
     environment:
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     networks:
       - arr
 
@@ -125,11 +107,11 @@ services:
     environment:
       - PUID=568
       - PGID=568
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     volumes:
       - /configs/sonarr:/config
-      - /media/tv:/media/tv #optional
-      - /media/downloads:/media/downloads #optional
+      - /mnt/ext/Media/TVShows:/media/tv #optional
+      - /mnt/ext/Media/Downloads:/media/downloads #optional
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -139,7 +121,7 @@ services:
   watchtower:
     image: containrrr/watchtower
     environment:
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
       - WATCHTOWER_SCHEDULE=0 0 3 * * *
@@ -154,7 +136,7 @@ services:
       - PUID=568
       - PGID=568
       - UMASK=002
-      - TZ=America/New_York
+      - TZ=Europe/Dublin
     volumes:
       - /configs/unpackerr:/config
     networks:
