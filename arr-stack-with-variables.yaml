@@ -1,23 +1,5 @@
 version: "2.1"
 services:
-  emby:
-    image: lscr.io/linuxserver/emby:latest
-    container_name: emby
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${CONFIG_PATH}/emby:/config
-      - ${TV_PATH}:/media/tv
-      - ${MOVIES_PATH}:/media/movies
-    ports:
-      - 8096:8096
-      - 8920:8920 #optional
-    networks:
-      - arr
-    restart: unless-stopped
-
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
@@ -32,17 +14,17 @@ services:
     networks:
       - arr
 
-  jellyseerr:
-    image: fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
     environment:
       - LOG_LEVEL=debug
-      - TZ=${TIMEZONE}
-      - JELLYFIN_TYPE=emby
+      - TZ=Europe/Dublin
+      - PORT=5055 #optional
     ports:
       - 5055:5055
     volumes:
-      - ${CONFIG_PATH}/jellyseerr:/app/config
+      - ${CONFIG_PATH}/Overseerr:/config
     restart: unless-stopped
     networks:
       - arr
@@ -73,7 +55,7 @@ services:
       - PGID=${PGID}
       - UMASK=002
       - TZ=${TIMEZONE}
-      - VPN_ENABLED=true
+      - VPN_ENABLED=false
       - VPN_LAN_NETWORK=192.168.1.0/24
       - VPN_CONF=wg0
       - VPN_ADDITIONAL_PORTS
@@ -151,8 +133,8 @@ services:
     container_name: unpackerr
     image: ghcr.io/hotio/unpackerr
     environment:
-      - PUID=568
-      - PGID=568
+      - PUID=${PUID}
+      - PGID=${PGID}
       - UMASK=002
       - TZ=${TIMEZONE}
     volumes:
