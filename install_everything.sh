@@ -283,7 +283,7 @@ networks:
 
 EOT
 
-sudo docker-compose -f arrstack.yaml up -d
+sudo docker compose -f arrstack.yaml up -d
 sleep 10
 
 
