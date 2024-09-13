@@ -116,9 +116,9 @@ sudo docker network create arr && echo "Docker network 'arr' created."
 
 #Build media directory structure
 #sudo mkdir -p /mnt/ext/media/{downloads,movies,tv}
-sudo mkdir -p /configs/{emby,jellyseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
+sudo mkdir -p /configs/{overseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
 #sudo chown -R apps:apps /media/{downloads,movies,tv}
-sudo chown -R apps:apps /configs /configs/{emby,jellyseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
+sudo chown -R apps:apps /configs /configs/{overseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
 sudo chmod -R 777 /mnt/ext/Media /configs
 
 
@@ -155,7 +155,7 @@ services:
     ports:
       - 5055:5055
     volumes:
-      - ${CONFIG_PATH}/Overseerr:/config
+      - ${CONFIG_PATH}/overseerr:/config
     restart: unless-stopped
     networks:
       - arr
