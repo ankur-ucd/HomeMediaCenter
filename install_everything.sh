@@ -31,8 +31,8 @@ Endpoint =
 
 #docker container settings
 TIMEZONE=Europe/Dublin
-PUID=568
-PGID=568
+PUID=1000
+PGID=1000
 
 # Set CONFIG_PATH 
   CONFIG_PATH=/configs
@@ -96,9 +96,6 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
 echo "Docker Installed."
 
-# setup media network
-docker network create media
-
 # Install Portainer
 echo "Installing Portainer."
 docker volume create portainer_data
@@ -109,20 +106,20 @@ echo "Portainer Installed."
 echo "Done!"
 
 # Add apps user and group
-sudo groupadd -g 568 apps
-sudo useradd -u 568 -g 568 -m -s /bin/bash apps
+sudo groupadd -g 1000 apps
+sudo useradd -u 1000 -g 1000 -m -s /bin/bash apps
 echo "User & Group apps created!"
 
 #create docker network called group
-sudo docker network create arr && echo "Docker network 'arr' created."
+sudo docker network create media && echo "Docker network 'media' created."
 
 
 #Build media directory structure
-#sudo mkdir -p /mnt/ext/media/{downloads,movies,tv}
+sudo mkdir -p /mnt/media/
 sudo mkdir -p /configs/{overseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
-#sudo chown -R apps:apps /media/{downloads,movies,tv}
+sudo chown -R apps:apps /media/
 sudo chown -R apps:apps /configs /configs/{overseerr,prowlarr,qbit,radarr,recyclarr,sonarr,unpackerr}
-sudo chmod -R 777 /mnt/ext/Media /configs
+sudo chmod -R 777 /mnt/media /configs
 
 
 echo "Media directory structure created!"
