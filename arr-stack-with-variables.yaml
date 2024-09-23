@@ -7,7 +7,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
     ports:
       - "${PORT:-8191}:8191"
     restart: unless-stopped
@@ -19,12 +19,12 @@ services:
     container_name: overseerr
     environment:
       - LOG_LEVEL=debug
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
       - PORT=5055 #optional
     ports:
       - 5055:5055
     volumes:
-      - /configs/Overseerr:/config
+      - ${CONFIG_PATH}/Overseerr:/config
     restart: unless-stopped
     networks:
       - media
@@ -33,11 +33,11 @@ services:
     image: lscr.io/linuxserver/prowlmedia:latest
     container_name: prowlmedia
     environment:
-      - PUID=568
-      - PGID=568
-      - TZ=Europe/Dublin
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
-      - /configs/prowlmedia:/config
+      - ${CONFIG_PATH}/prowlmedia:/config
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -51,18 +51,18 @@ services:
       - "8080:8080"
       - "8118:8118"
     environment:
-      - PUID=568
-      - PGID=568
+      - PUID=${PUID}
+      - PGID=${PGID}
       - UMASK=002
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
       - VPN_ENABLED=false
       - VPN_LAN_NETWORK=192.168.1.0/24
       - VPN_CONF=wg0
       - VPN_ADDITIONAL_PORTS
       - PRIVOXY_ENABLED=false
     volumes:
-      - /configs/qbit:/config
-      - /mnt/ext/Media/Downloads:/media/downloads
+      - ${CONFIG_PATH}/qbit:/config
+      - ${DOWNLOADS_PATH}:/media/downloads
     cap_add:
       - NET_ADMIN
     dns:
@@ -77,13 +77,13 @@ services:
     image: lscr.io/linuxserver/radmedia:latest
     container_name: radmedia
     environment:
-      - PUID=568
-      - PGID=568
-      - TZ=Europe/Dublin
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
-      - /configs/radmedia:/config
-      - /mnt/ext/Media/Movies:/media/movies 
-      - /mnt/ext/Media/Downloads:/media/downloads 
+      - ${CONFIG_PATH}/radmedia:/config
+      - ${MOVIES_PATH}:/media/movies 
+      - ${DOWNLOADS_PATH}:/media/downloads 
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -93,11 +93,11 @@ services:
   recyclmedia:
     image: ghcr.io/recyclmedia/recyclmedia
     container_name: recyclmedia
-    user: 568:568
+    user: 1000:1000
     volumes:
-      - /configs/recyclmedia:/config
+      - ${CONFIG_PATH}/recyclmedia:/config
     environment:
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
     networks:
       - media
 
@@ -105,13 +105,13 @@ services:
     image: lscr.io/linuxserver/sonmedia:latest
     container_name: sonmedia
     environment:
-      - PUID=568
-      - PGID=568
-      - TZ=Europe/Dublin
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
     volumes:
-      - /configs/sonmedia:/config
-      - /mnt/ext/Media/TVShows:/media/tv #optional
-      - /mnt/ext/Media/Downloads:/media/downloads #optional
+      - ${CONFIG_PATH}/sonmedia:/config
+      - ${TV_PATH}:/media/tv #optional
+      - ${DOWNLOADS_PATH}:/media/downloads #optional
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -121,7 +121,7 @@ services:
   watchtower:
     image: containrrr/watchtower
     environment:
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
       - WATCHTOWER_SCHEDULE=0 0 3 * * *
@@ -133,12 +133,12 @@ services:
     container_name: unpackerr
     image: ghcr.io/hotio/unpackerr
     environment:
-      - PUID=568
-      - PGID=568
+      - PUID=${PUID}
+      - PGID=${PGID}
       - UMASK=002
-      - TZ=Europe/Dublin
+      - TZ=${TIMEZONE}
     volumes:
-      - /configs/unpackerr:/config
+      - ${CONFIG_PATH}/unpackerr:/config
     networks:
       - media
     security_opt:
