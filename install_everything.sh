@@ -30,7 +30,7 @@ Endpoint =
 "
 
 #docker container settings
-TIMEZONE=America/New_York
+TIMEZONE=Europe/Dublin
 PUID=568
 PGID=568
 
@@ -95,6 +95,9 @@ apt-get update
 # Install Docker packages
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
 echo "Docker Installed."
+
+# setup media network
+docker network create media
 
 # Install Portainer
 echo "Installing Portainer."
