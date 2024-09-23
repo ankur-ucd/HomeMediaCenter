@@ -19,7 +19,7 @@ services:
     container_name: overseerr
     environment:
       - LOG_LEVEL=debug
-      - TZ=${TIMEZONE}
+      - TZ=Europe/Dublin
       - PORT=5055 #optional
     ports:
       - 5055:5055
@@ -29,15 +29,15 @@ services:
     networks:
       - media
 
-  prowlmedia:
-    image: lscr.io/linuxserver/prowlmedia:latest
-    container_name: prowlmedia
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/prowlmedia:/config
+      - ${CONFIG_PATH}/prowlarr:/config
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -73,15 +73,15 @@ services:
     networks:
       - media
 
-  radmedia:
-    image: lscr.io/linuxserver/radmedia:latest
-    container_name: radmedia
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/radmedia:/config
+      - ${CONFIG_PATH}/radarr:/config
       - ${MOVIES_PATH}:/media/movies 
       - ${DOWNLOADS_PATH}:/media/downloads 
     ports:
@@ -90,26 +90,26 @@ services:
     networks:
       - media
 
-  recyclmedia:
-    image: ghcr.io/recyclmedia/recyclmedia
-    container_name: recyclmedia
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr
+    container_name: recyclarr
     user: 1000:1000
     volumes:
-      - ${CONFIG_PATH}/recyclmedia:/config
+      - ${CONFIG_PATH}/recyclarr:/config
     environment:
       - TZ=${TIMEZONE}
     networks:
       - media
 
-  sonmedia:
-    image: lscr.io/linuxserver/sonmedia:latest
-    container_name: sonmedia
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/sonmedia:/config
+      - ${CONFIG_PATH}/sonarr:/config
       - ${TV_PATH}:/media/tv #optional
       - ${DOWNLOADS_PATH}:/media/downloads #optional
     ports:
