@@ -144,6 +144,20 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - ${CONFIG_PATH}/homarr/configs:/app/data/configs
+      - ${CONFIG_PATH}/homarr/icons:/app/public/icons
+      - ${CONFIG_PATH}/homarr/data:/data
+    ports:
+      - '7575:7575'
+    networks:
+      - media
+
 networks:
   media:
     external: true
